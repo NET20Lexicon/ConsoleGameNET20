@@ -49,7 +49,8 @@ namespace ConsoleGameNET20
         {
             //ToDo: Read from config
             map = new Map(width: 10,height: 10);
-            hero = new Hero();
+            var heroCell = map.GetCell(0, 0);
+            hero = new Hero(heroCell);
         }
     }
 }
