@@ -1,9 +1,12 @@
-﻿namespace ConsoleGameNET20
+﻿using System;
+
+namespace ConsoleGameNET20
 {
-    internal class Hero
+    internal class Hero : Creature
     {
-        public Hero()
+        public Hero(Cell cell) : base(cell, "H ") 
         {
+            Color = ConsoleColor.Yellow;
         }
     }
 }

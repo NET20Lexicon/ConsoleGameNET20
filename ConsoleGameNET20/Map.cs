@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace ConsoleGameNET20
 {
@@ -8,6 +9,7 @@ namespace ConsoleGameNET20
         public int Height { get; }
 
         private readonly Cell[,] cells;
+        public List<Creature> Creatures { get; set; } = new List<Creature>();
 
         public Map(int width, int height)
         {
