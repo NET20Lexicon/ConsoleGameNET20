@@ -22,22 +22,20 @@ namespace ConsoleGameNET20
             {
                 for (int x = 0; x < width; x++)
                 {
-                    cells[y, x] = new Cell(y,x);
+                    cells[y, x] = new Cell(new Position( y, x));
                 }
             }
         }
 
         internal Cell GetCell(int y, int x)
         {
-            //ToDo: Refactor
-            try
-            {
-                return cells[y, x];
-            }
-            catch (Exception)
-            {
-                return null;                 
-            }
+            if (x < 0 || x >= Width || y < 0 || y >= Height) return null;
+            return cells[y, x];
+        }
+
+        internal Cell GetCell(Position newPosition)
+        {
+            return GetCell(newPosition.Y, newPosition.X);
         }
     }
 }

@@ -15,5 +15,22 @@ namespace ConsoleGameNET20
             Console.CursorVisible = false;
             Console.SetCursorPosition(0, 0);
         }
+
+        internal static void Draw(Map map)
+        {
+            for (int y = 0; y < map.Height; y++)
+            {
+                for (int x = 0; x < map.Width; x++)
+                {
+                    Cell cell = map.GetCell(y, x);
+                    IDrawable drawable = map.Creatures.CreatureAtExtension(cell) ?? cell;
+
+                    Console.ForegroundColor = drawable?.Color ?? ConsoleColor.White;
+                    Console.Write(drawable?.Symbol);
+                }
+                Console.WriteLine();
+            }
+            Console.ForegroundColor = ConsoleColor.White;
+        }
     }
 }
