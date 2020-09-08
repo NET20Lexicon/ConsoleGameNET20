@@ -60,7 +60,6 @@ namespace ConsoleGameNET20
 
         private void Move(Position movement)
         {
-
             Position newPosition = hero.Cell.Position + movement;
             Cell newCell = map.GetCell(newPosition);
             if (newCell != null) hero.Cell = newCell;

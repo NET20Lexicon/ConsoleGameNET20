@@ -23,7 +23,8 @@ namespace ConsoleGameNET20
                 for (int x = 0; x < map.Width; x++)
                 {
                     Cell cell = map.GetCell(y, x);
-                    IDrawable drawable = map.Creatures.CreatureAtExtension(cell) ?? cell;
+                    IDrawable drawable = map.CreatureAt(cell) ?? cell;
+                    // IDrawable drawable = map.Creatures.CreatureAtExtension(cell) ?? cell;
 
                     Console.ForegroundColor = drawable?.Color ?? ConsoleColor.White;
                     Console.Write(drawable?.Symbol);

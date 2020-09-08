@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ConsoleGameNET20
 {
@@ -22,9 +23,14 @@ namespace ConsoleGameNET20
             {
                 for (int x = 0; x < width; x++)
                 {
-                    cells[y, x] = new Cell(new Position( y, x));
+                    cells[y, x] = new Cell(new Position(y, x));
                 }
             }
+        }
+
+        internal IDrawable CreatureAt(Cell cell)
+        {
+            return Creatures.FirstOrDefault(creature => creature.Cell == cell);
         }
 
         internal Cell GetCell(int y, int x)
