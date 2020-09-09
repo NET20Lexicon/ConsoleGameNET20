@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace ConsoleGameNET20
 {
@@ -23,8 +24,7 @@ namespace ConsoleGameNET20
                 for (int x = 0; x < map.Width; x++)
                 {
                     Cell cell = map.GetCell(y, x);
-                    IDrawable drawable = map.CreatureAt(cell) ?? cell;
-                    // IDrawable drawable = map.Creatures.CreatureAtExtension(cell) ?? cell;
+                    IDrawable drawable = map.CreatureAt(cell) ??  (IDrawable)cell.Items.FirstOrDefault() ??  cell;
 
                     Console.ForegroundColor = drawable?.Color ?? ConsoleColor.White;
                     Console.Write(drawable?.Symbol);
