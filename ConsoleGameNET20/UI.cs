@@ -12,10 +12,7 @@ namespace ConsoleGameNET20
 
         public static void PrintLog()
         {
-            foreach (var item in messageLog)
-            {
-                Console.WriteLine(item);
-            }
+            messageLog.ActionAll(m => Console.WriteLine(m));
         }
 
         internal static ConsoleKey GetKey()
@@ -38,12 +35,28 @@ namespace ConsoleGameNET20
                 {
                     Cell cell = map.GetCell(y, x);
                     IDrawable drawable = map.CreatureAt(cell) ??  (IDrawable)cell.Items.FirstOrDefault() ??  cell;
+                 
+                    //if(drawable is null)
+                    //{
+                    //    Console.ForegroundColor = ConsoleColor.White;
+                    //}
+                    //else
+                    //{
+                    //    Console.ForegroundColor = drawable.Color;
+                    //}
 
                     Console.ForegroundColor = drawable?.Color ?? ConsoleColor.White;
                     Console.Write(drawable?.Symbol);
                 }
                 Console.WriteLine();
             }
+            Console.ForegroundColor = ConsoleColor.White;
+        }
+
+        internal static void PrintStats(string stats)
+        {
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine(stats);
             Console.ForegroundColor = ConsoleColor.White;
         }
     }

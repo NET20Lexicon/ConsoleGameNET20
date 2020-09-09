@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Data;
 using System.Linq;
@@ -54,17 +55,29 @@ namespace ConsoleGameNET20
                 case ConsoleKey.DownArrow:
                     Move(Direction.South);
                     break;
-                case ConsoleKey.P:
-                    PickUp();
-                    break;
-                case ConsoleKey.I:
-                    Inventory();
-                    break;
+                //case ConsoleKey.P:
+                //    PickUp();
+                //    break;
+                //case ConsoleKey.I:
+                //    Inventory();
+                //    break;
                 case ConsoleKey.Q:
                     Environment.Exit(0);
                     break;
                 default:
                     break;
+            }
+
+            var actionMeny = new Dictionary<ConsoleKey, Action>()
+            {
+                {ConsoleKey.P, PickUp },
+                {ConsoleKey.I, Inventory }
+            };
+
+            if (actionMeny.ContainsKey(keyPressed))
+            {
+                var method = actionMeny[keyPressed];
+                method?.Invoke();
             }
 
         }
@@ -109,7 +122,8 @@ namespace ConsoleGameNET20
         {
             UI.Clear();
             UI.Draw(map);
-
+            UI.PrintStats($"Health: {hero.Health} \nEnemys: {map.Creatures.Count}");
+            UI.PrintLog();
         }
 
         private void Initialize()
