@@ -2,6 +2,7 @@
 using System.ComponentModel.Design;
 using System.Data;
 using System.Linq;
+using System.Text;
 
 namespace ConsoleGameNET20
 {
@@ -31,7 +32,7 @@ namespace ConsoleGameNET20
                 //enemy actions
                 //Drawmap
 
-              //  Console.ReadKey();
+                //  Console.ReadKey();
             } while (gameInProgrees);
         }
 
@@ -55,7 +56,7 @@ namespace ConsoleGameNET20
                     break;
                 case ConsoleKey.P:
                     PickUp();
-                    break; 
+                    break;
                 case ConsoleKey.I:
                     Inventory();
                     break;
@@ -70,15 +71,31 @@ namespace ConsoleGameNET20
 
         private void Inventory()
         {
-            foreach (var item in hero.BackPack)
+            var builder = new StringBuilder();
+            builder.AppendLine("Inventory: ");
+            for (int i = 0; i < hero.BackPack.Count; i++)
             {
-                Console.WriteLine(item);
+                builder.AppendLine($"{i + 1}: \t{hero.BackPack[i]}");
             }
+            UI.AddMessage(builder.ToString());
         }
 
         private void PickUp()
         {
-            throw new NotImplementedException();
+            if (hero.BackPack.IsFull)
+            {
+                UI.AddMessage("Backpack is full");
+                return;
+            }
+
+            var items = hero.Cell.Items;
+            var item = items.FirstOrDefault();
+            if (item == null) return;
+            if (hero.BackPack.Add(item))
+            {
+                UI.AddMessage($"Hero picks up {item}");
+                items.Remove(item);
+            }
         }
 
         private void Move(Position movement)
@@ -92,7 +109,7 @@ namespace ConsoleGameNET20
         {
             UI.Clear();
             UI.Draw(map);
-            
+
         }
 
         private void Initialize()

@@ -1,10 +1,23 @@
-﻿using System;
+﻿using LimitedList;
+using System;
 using System.Linq;
 
 namespace ConsoleGameNET20
 {
     internal static class UI
     {
+        private static MessageLog<string> messageLog = new MessageLog<string>(6);
+
+        public static void AddMessage(string message) => messageLog.Add(message);
+
+        public static void PrintLog()
+        {
+            foreach (var item in messageLog)
+            {
+                Console.WriteLine(item);
+            }
+        }
+
         internal static ConsoleKey GetKey()
         {
             return Console.ReadKey(intercept: true).Key;
