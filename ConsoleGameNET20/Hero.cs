@@ -10,6 +10,7 @@ namespace ConsoleGameNET20
         {
             Color = ConsoleColor.Yellow;
             BackPack = new LimitedList<Item>(3);
+            Damage = 25;
         }
 
         

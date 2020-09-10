@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
@@ -11,6 +12,7 @@ namespace ConsoleGameNET20
     {
         private Map map;
         private Hero hero;
+        private bool gameInProgrees = true;
 
         internal void Run()
         {
@@ -20,7 +22,6 @@ namespace ConsoleGameNET20
 
         private void Play()
         {
-            bool gameInProgrees = true;
             do
             {
                 Drawmap();
@@ -118,6 +119,15 @@ namespace ConsoleGameNET20
             var items = hero.Cell.Items;
             var item = items.FirstOrDefault();
             if (item == null) return;
+
+            if(item is IUsable usable)
+            {
+                usable.Use(hero);
+                hero.Cell.Items.Remove(item);
+                UI.AddMessage($"You use the {item}");
+                return;
+            }
+
             if (hero.BackPack.Add(item))
             {
                 UI.AddMessage($"Hero picks up {item}");
@@ -133,6 +143,7 @@ namespace ConsoleGameNET20
             var opponent = map.CreatureAt(newCell) as Creature;
             if (opponent != null) hero.Attack(opponent);
 
+            gameInProgrees = !hero.IsDead;
 
             if (newCell != null)
             {
@@ -147,7 +158,7 @@ namespace ConsoleGameNET20
         {
             UI.Clear();
             UI.Draw(map);
-            UI.PrintStats($"Health: {hero.Health} \nEnemys: {map.Creatures.Count}");
+            UI.PrintStats($"Health: {hero.Health} \nEnemys: {map.Creatures.Where(c => !c.IsDead).Count() -1}");
             UI.PrintLog();
         }
 
@@ -167,8 +178,10 @@ namespace ConsoleGameNET20
             var random = new Random();
             map.GetCell(random.Next(0,map.Height), random.Next(0, map.Width)).Items.Add(Item.Coin());
             map.GetCell(random.Next(0, map.Height), random.Next(0, map.Width)).Items.Add(Item.Coin());
+            map.GetCell(random.Next(0, map.Height), random.Next(0, map.Width)).Items.Add(Item.Coin());
             map.GetCell(random.Next(0, map.Height), random.Next(0, map.Width)).Items.Add(Item.Torch());
-            map.GetCell(random.Next(0, map.Height), random.Next(0, map.Width)).Items.Add(Item.Torch());
+            map.GetCell(random.Next(0, map.Height), random.Next(0, map.Width)).Items.Add(Portion.HealthPortion());
+            map.GetCell(random.Next(0, map.Height), random.Next(0, map.Width)).Items.Add(Portion.HealthPortion());
 
             map.Place(new Orc(map.GetCell(random.Next(0, map.Height), random.Next(0, map.Width))));
             map.Place(new Orc(map.GetCell(random.Next(0, map.Height), random.Next(0, map.Width))));
@@ -176,6 +189,9 @@ namespace ConsoleGameNET20
             map.Place(new Goblin(map.GetCell(random.Next(0, map.Height), random.Next(0, map.Width))));
             map.Place(new Goblin(map.GetCell(random.Next(0, map.Height), random.Next(0, map.Width))));
             map.Place(new Goblin(map.GetCell(random.Next(0, map.Height), random.Next(0, map.Width))));
+
+            map.Creatures.ForEach(c => c.AddMessage = UI.AddMessage);
+            map.Creatures.ForEach(c => c.AddMessage += (s) => Debug.WriteLine(s));
         }
     }
 }
