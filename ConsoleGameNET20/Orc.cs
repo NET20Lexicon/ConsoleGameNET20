@@ -6,7 +6,7 @@ namespace ConsoleGameNET20
 {
     class Orc : Creature
     {
-        public Orc(Cell cell, int maxHealth) : base(cell, "O ", maxHealth)
+        public Orc(Cell cell) : base(cell, "O ", 125)
         {
             Damage = 25;
             Color = ConsoleColor.Cyan;

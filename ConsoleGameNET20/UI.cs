@@ -12,7 +12,12 @@ namespace ConsoleGameNET20
 
         public static void PrintLog()
         {
-            messageLog.ActionAll(m => Console.WriteLine(m));
+            messageLog.ActionAll(Print);
+        }
+
+        private static void Print(string message)
+        {
+            Console.WriteLine(message + new string(' ', Console.WindowWidth - message.Length));
         }
 
         internal static ConsoleKey GetKey()

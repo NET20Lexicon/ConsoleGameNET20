@@ -71,7 +71,8 @@ namespace ConsoleGameNET20
             var actionMeny = new Dictionary<ConsoleKey, Action>()
             {
                 {ConsoleKey.P, PickUp },
-                {ConsoleKey.I, Inventory }
+                {ConsoleKey.I, Inventory },
+                {ConsoleKey.D, Drop }
             };
 
             if (actionMeny.ContainsKey(keyPressed))
@@ -80,6 +81,19 @@ namespace ConsoleGameNET20
                 method?.Invoke();
             }
 
+        }
+
+        private void Drop()
+        {
+            var item = hero.BackPack.FirstOrDefault();
+            if (hero.BackPack.Remove(item))
+            {
+                // map.GetCell(hero.Cell.Position).Items.Add(item);
+                hero.Cell.Items.Add(item);
+                UI.AddMessage($"You dropped the {item}");
+            }
+            else
+                UI.AddMessage("Backpack is empty");
         }
 
         private void Inventory()
@@ -115,7 +129,18 @@ namespace ConsoleGameNET20
         {
             Position newPosition = hero.Cell.Position + movement;
             Cell newCell = map.GetCell(newPosition);
-            if (newCell != null) hero.Cell = newCell;
+
+            var opponent = map.CreatureAt(newCell) as Creature;
+            if (opponent != null) hero.Attack(opponent);
+
+
+            if (newCell != null)
+            {
+                hero.Cell = newCell;
+                if (newCell.Items.Any())
+                    UI.AddMessage("You see " + string.Join(", ", newCell.Items.Select(i => i.ToString())));
+
+            } 
         }
 
         private void Drawmap()
@@ -130,15 +155,27 @@ namespace ConsoleGameNET20
         {
             //ToDo: Read from config
             map = new Map(width: 10, height: 10);
+            AddCreaturesAndItems();
+        }
+
+        private void AddCreaturesAndItems()
+        {
             var heroCell = map.GetCell(0, 0);
             hero = new Hero(heroCell);
             map.Creatures.Add(hero);
 
-            //ToDo random position
-            map.GetCell(3, 3).Items.Add(Item.Coin());
-            map.GetCell(0, 8).Items.Add(Item.Coin());
-            map.GetCell(7, 4).Items.Add(Item.Torch());
-            map.GetCell(8, 7).Items.Add(Item.Torch());
+            var random = new Random();
+            map.GetCell(random.Next(0,map.Height), random.Next(0, map.Width)).Items.Add(Item.Coin());
+            map.GetCell(random.Next(0, map.Height), random.Next(0, map.Width)).Items.Add(Item.Coin());
+            map.GetCell(random.Next(0, map.Height), random.Next(0, map.Width)).Items.Add(Item.Torch());
+            map.GetCell(random.Next(0, map.Height), random.Next(0, map.Width)).Items.Add(Item.Torch());
+
+            map.Place(new Orc(map.GetCell(random.Next(0, map.Height), random.Next(0, map.Width))));
+            map.Place(new Orc(map.GetCell(random.Next(0, map.Height), random.Next(0, map.Width))));
+            map.Place(new Orc(map.GetCell(random.Next(0, map.Height), random.Next(0, map.Width))));
+            map.Place(new Goblin(map.GetCell(random.Next(0, map.Height), random.Next(0, map.Width))));
+            map.Place(new Goblin(map.GetCell(random.Next(0, map.Height), random.Next(0, map.Width))));
+            map.Place(new Goblin(map.GetCell(random.Next(0, map.Height), random.Next(0, map.Width))));
         }
     }
 }

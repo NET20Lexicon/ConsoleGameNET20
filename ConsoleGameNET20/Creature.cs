@@ -36,5 +36,10 @@ namespace ConsoleGameNET20
             Symbol = symbol;
             MaxHealth = maxHealth;
         }
+
+        internal void Attack(Creature opponent)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
