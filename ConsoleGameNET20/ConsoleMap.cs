@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Configuration;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -12,8 +13,11 @@ namespace ConsoleGameNET20
         private readonly Cell[,] cells;
         public List<Creature> Creatures { get; set; } = new List<Creature>();
 
-        public ConsoleMap(int width, int height)
+        public ConsoleMap(IConfiguration config)
         {
+          int width = config.GetMapSizeFor("x");
+          int height = config.GetMapSizeFor("y");
+
             Width = width;
             Height = height;
 
@@ -27,6 +31,7 @@ namespace ConsoleGameNET20
                 }
             }
         }
+
 
         public IDrawable CreatureAt(Cell cell)
         {

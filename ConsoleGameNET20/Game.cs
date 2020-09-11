@@ -15,11 +15,11 @@ namespace ConsoleGameNET20
         private IMap map;
         private Hero hero;
         private bool gameInProgrees = true;
-        private IConfiguration config;
 
-        public Game(IConfiguration config)
+        public Game(IUI ui, IMap map)
         {
-            this.config = config;
+            this.ui = ui;
+            this.map = map;
         }
 
         internal void Run()
@@ -172,15 +172,9 @@ namespace ConsoleGameNET20
 
         private void Initialize()
         {
-            ui = new ConsoleUI();
+           // ui = new ConsoleUI();
 
-            int width = int.Parse(config.GetSection("consolegame:mapsettings:x").Value);
-           
-            var mapSett = config.GetSection("consolegame:mapsettings");
-
-            int.TryParse(mapSett["y"], out int height);
-
-            map = new ConsoleMap(width, height);
+          //  map = new ConsoleMap(config);
             AddCreaturesAndItems();
         }
 
