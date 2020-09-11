@@ -6,7 +6,7 @@ namespace ConsoleGameNET20
     {
         void AddMessage(string message);
         void Clear();
-        void Draw(ConsoleMap map);
+        void Draw(IMap map);
         ConsoleKey GetKey();
         void PrintLog();
         void PrintStats(string stats);

@@ -2,7 +2,7 @@
 
 namespace ConsoleGameNET20
 {
-    internal interface IMap
+    public interface IMap
     {
         List<Creature> Creatures { get; set; }
         int Height { get; }

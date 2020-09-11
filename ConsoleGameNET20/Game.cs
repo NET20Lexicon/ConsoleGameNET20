@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Configuration;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Data;
@@ -11,9 +12,15 @@ namespace ConsoleGameNET20
     internal class Game
     {
         private IUI ui;
-        private ConsoleMap map;
+        private IMap map;
         private Hero hero;
         private bool gameInProgrees = true;
+        private IConfiguration config;
+
+        public Game(IConfiguration config)
+        {
+            this.config = config;
+        }
 
         internal void Run()
         {
@@ -166,8 +173,14 @@ namespace ConsoleGameNET20
         private void Initialize()
         {
             ui = new ConsoleUI();
-            //ToDo: Read from config
-            map = new ConsoleMap(width: 10, height: 10);
+
+            int width = int.Parse(config.GetSection("consolegame:mapsettings:x").Value);
+           
+            var mapSett = config.GetSection("consolegame:mapsettings");
+
+            int.TryParse(mapSett["y"], out int height);
+
+            map = new ConsoleMap(width, height);
             AddCreaturesAndItems();
         }
 

@@ -32,7 +32,7 @@ namespace ConsoleGameNET20
             Console.SetCursorPosition(0, 0);
         }
 
-        public void Draw(ConsoleMap map)
+        public void Draw(IMap map)
         {
             for (int y = 0; y < map.Height; y++)
             {
