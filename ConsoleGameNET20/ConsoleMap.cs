@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace ConsoleGameNET20
 {
-    internal class Map
+    public class ConsoleMap : IMap
     {
         public int Width { get; }
         public int Height { get; }
@@ -12,7 +12,7 @@ namespace ConsoleGameNET20
         private readonly Cell[,] cells;
         public List<Creature> Creatures { get; set; } = new List<Creature>();
 
-        public Map(int width, int height)
+        public ConsoleMap(int width, int height)
         {
             Width = width;
             Height = height;
@@ -28,23 +28,23 @@ namespace ConsoleGameNET20
             }
         }
 
-        internal IDrawable CreatureAt(Cell cell)
+        public IDrawable CreatureAt(Cell cell)
         {
             return Creatures.FirstOrDefault(creature => creature.Cell == cell);
         }
 
-        internal Cell GetCell(int y, int x)
+        public Cell GetCell(int y, int x)
         {
             if (x < 0 || x >= Width || y < 0 || y >= Height) return null;
             return cells[y, x];
         }
 
-        internal Cell GetCell(Position newPosition)
+        public Cell GetCell(Position newPosition)
         {
             return GetCell(newPosition.Y, newPosition.X);
         }
 
-        internal void Place(Creature creature)
+        public void Place(Creature creature)
         {
             if (Creatures.Where(c => c.Cell == creature.Cell).Count() >= 1)
                 creature = null;

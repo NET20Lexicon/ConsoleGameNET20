@@ -10,7 +10,8 @@ namespace ConsoleGameNET20
 {
     internal class Game
     {
-        private Map map;
+        private IUI ui;
+        private ConsoleMap map;
         private Hero hero;
         private bool gameInProgrees = true;
 
@@ -40,7 +41,7 @@ namespace ConsoleGameNET20
 
         private void GetInput()
         {
-            var keyPressed = UI.GetKey();
+            var keyPressed = ui.GetKey();
 
             switch (keyPressed)
             {
@@ -91,10 +92,10 @@ namespace ConsoleGameNET20
             {
                 // map.GetCell(hero.Cell.Position).Items.Add(item);
                 hero.Cell.Items.Add(item);
-                UI.AddMessage($"You dropped the {item}");
+                ui.AddMessage($"You dropped the {item}");
             }
             else
-                UI.AddMessage("Backpack is empty");
+                ui.AddMessage("Backpack is empty");
         }
 
         private void Inventory()
@@ -105,14 +106,14 @@ namespace ConsoleGameNET20
             {
                 builder.AppendLine($"{i + 1}: \t{hero.BackPack[i]}");
             }
-            UI.AddMessage(builder.ToString());
+            ui.AddMessage(builder.ToString());
         }
 
         private void PickUp()
         {
             if (hero.BackPack.IsFull)
             {
-                UI.AddMessage("Backpack is full");
+                ui.AddMessage("Backpack is full");
                 return;
             }
 
@@ -124,13 +125,13 @@ namespace ConsoleGameNET20
             {
                 usable.Use(hero);
                 hero.Cell.Items.Remove(item);
-                UI.AddMessage($"You use the {item}");
+                ui.AddMessage($"You use the {item}");
                 return;
             }
 
             if (hero.BackPack.Add(item))
             {
-                UI.AddMessage($"Hero picks up {item}");
+                ui.AddMessage($"Hero picks up {item}");
                 items.Remove(item);
             }
         }
@@ -149,23 +150,24 @@ namespace ConsoleGameNET20
             {
                 hero.Cell = newCell;
                 if (newCell.Items.Any())
-                    UI.AddMessage("You see " + string.Join(", ", newCell.Items.Select(i => i.ToString())));
+                    ui.AddMessage("You see " + string.Join(", ", newCell.Items.Select(i => i.ToString())));
 
             } 
         }
 
         private void Drawmap()
         {
-            UI.Clear();
-            UI.Draw(map);
-            UI.PrintStats($"Health: {hero.Health} \nEnemys: {map.Creatures.Where(c => !c.IsDead).Count() -1}");
-            UI.PrintLog();
+            ui.Clear();
+            ui.Draw(map);
+            ui.PrintStats($"Health: {hero.Health} \nEnemys: {map.Creatures.Where(c => !c.IsDead).Count() -1}");
+            ui.PrintLog();
         }
 
         private void Initialize()
         {
+            ui = new ConsoleUI();
             //ToDo: Read from config
-            map = new Map(width: 10, height: 10);
+            map = new ConsoleMap(width: 10, height: 10);
             AddCreaturesAndItems();
         }
 
@@ -190,7 +192,7 @@ namespace ConsoleGameNET20
             map.Place(new Goblin(map.GetCell(random.Next(0, map.Height), random.Next(0, map.Width))));
             map.Place(new Goblin(map.GetCell(random.Next(0, map.Height), random.Next(0, map.Width))));
 
-            map.Creatures.ForEach(c => c.AddMessage = UI.AddMessage);
+            map.Creatures.ForEach(c => c.AddMessage = ui.AddMessage);
             map.Creatures.ForEach(c => c.AddMessage += (s) => Debug.WriteLine(s));
         }
     }

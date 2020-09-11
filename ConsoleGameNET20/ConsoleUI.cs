@@ -4,43 +4,43 @@ using System.Linq;
 
 namespace ConsoleGameNET20
 {
-    internal static class UI
+    public class ConsoleUI : IUI
     {
-        private static MessageLog<string> messageLog = new MessageLog<string>(6);
+        private MessageLog<string> messageLog = new MessageLog<string>(6);
 
-        public static void AddMessage(string message) => messageLog.Add(message);
+        public void AddMessage(string message) => messageLog.Add(message);
 
-        public static void PrintLog()
+        public void PrintLog()
         {
             messageLog.ActionAll(Print);
         }
 
-        private static void Print(string message)
+        private void Print(string message)
         {
             Console.WriteLine(message + new string(' ', Console.WindowWidth - message.Length));
         }
 
-        internal static ConsoleKey GetKey()
+        public ConsoleKey GetKey()
         {
             return Console.ReadKey(intercept: true).Key;
         }
 
-        internal static void Clear()
+        public void Clear()
         {
             //Console.Clear();
             Console.CursorVisible = false;
             Console.SetCursorPosition(0, 0);
         }
 
-        internal static void Draw(Map map)
+        public void Draw(ConsoleMap map)
         {
             for (int y = 0; y < map.Height; y++)
             {
                 for (int x = 0; x < map.Width; x++)
                 {
                     Cell cell = map.GetCell(y, x);
-                    IDrawable drawable = map.CreatureAt(cell) ??  (IDrawable)cell.Items.FirstOrDefault() ??  cell;
-                 
+                    IDrawable drawable = map.CreatureAt(cell) ?? (IDrawable)cell.Items.FirstOrDefault() ?? cell;
+
                     //if(drawable is null)
                     //{
                     //    Console.ForegroundColor = ConsoleColor.White;
@@ -58,7 +58,7 @@ namespace ConsoleGameNET20
             Console.ForegroundColor = ConsoleColor.White;
         }
 
-        internal static void PrintStats(string stats)
+        public void PrintStats(string stats)
         {
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine(stats);
